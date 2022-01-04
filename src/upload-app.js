@@ -31,7 +31,7 @@ async function uploadApp() {
   });
 
   const fileId = response.item.id;
-  core.setOutput('file_id', fileId);
+  core.setOutput('file-id', fileId);
 
   await fetch(`${sauceLabsDataCenterHostName}/v1/storage/files/${fileId}`, {
     method: 'PUT',
