@@ -1,0 +1,29 @@
+name: "Sauce Labs Storage Action"
+description: "Action responsible to upload the app into the Application Storage"
+inputs:
+  file-path:
+    description: "App file path"
+    required: true
+  sauce-labs-username:
+    description: "Username credential"
+    required: true
+  sauce-labs-access-key:
+    description: "Access key credential"
+    required: true
+  sauce-labs-data-center-host-name:
+    description: "Data Center hostname"
+    required: false
+    default: https://api.us-west-1.saucelabs.com
+  sauce-labs-artifact-description:
+    description: "App build description"
+    required: false
+    default: "Built from branch: ${{ (github.event_name == 'push' && github.ref) || (github.event_name == 'pull_request' && github.head_ref) }}. Workflow URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+outputs:
+  file-id: 
+    description: 'File ID uploaded'
+branding:
+  icon: upload-cloud
+  color: red
+runs:
+  using: node16
+  main: dist/index.js
