@@ -57,13 +57,13 @@ jobs:
 
 ## :gear: Inputs
 
-| Name                             | Description            |                                                                                                            Default                                                                                                             | Required |
-| -------------------------------- | ---------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: |
-| file-path                        | App file path.         |                                                                                                                                                                                                                                |   True   |
-| sauce-labs-username              | Username credential.   |                                                                                                                                                                                                                                |   True   |
-| sauce-labs-access-key            | Access key credential. |                                                                                                                                                                                                                                |   True   |
-| sauce-labs-data-center-host-name | Data Center hostname.  |                                                                                              https://api.us-west-1.saucelabs.com                                                                                               |  False   |
-| sauce-labs-artifact-description  | App build description. | `"Built from branch: ${{ (github.event_name == 'push' && github.ref) || (github.event_name == 'pull_request' && github.head_ref) }}. Workflow URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"` |  False   |
+| Name                             | Description            |                                                         Default                                                         | Required |
+| -------------------------------- | ---------------------- | :---------------------------------------------------------------------------------------------------------------------: | :------: |
+| file-path                        | App file path.         |                                                                                                                         |   True   |
+| sauce-labs-username              | Username credential.   |                                                                                                                         |   True   |
+| sauce-labs-access-key            | Access key credential. |                                                                                                                         |   True   |
+| sauce-labs-data-center-host-name | Data Center hostname.  |                                           https://api.us-west-1.saucelabs.com                                           |  False   |
+| sauce-labs-artifact-description  | App build description. | Built from branch: master. Workflow URL: https://github.com/ALJAZEERAPLUS/sauce-labs-storage-action/actions/runs/999999 |  False   |
 
 
 ## :gear: Outputs
