@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="/Users/hugo/Developer/sauce-labs-storage-action/__tests__/index.test.js">
+    <testCase name="Action execution should call upload when endpoint-action is &quot;upload&quot;" duration="2"/>
+    <testCase name="Action execution should call files when endpoint-action is &quot;get-file-id&quot;" duration="0"/>
+    <testCase name="Action execution should set failure when endpoint-action is invalid" duration="1"/>
+    <testCase name="Action execution should set failure when there is an error during execution" duration="2"/>
+  </file>
+  <file path="/Users/hugo/Developer/sauce-labs-storage-action/__tests__/endpoints/storage/upload.test.js">
+    <testCase name="Upload Endpoint successfully uploads a file" duration="2"/>
+    <testCase name="Upload Endpoint throws an error when file does not exist" duration="0"/>
+    <testCase name="Upload Endpoint throws an error when upload response is not 200" duration="1"/>
+    <testCase name="Upload Endpoint throws an error when upload response does not have an item" duration="0"/>
+    <testCase name="Upload Endpoint handles failure of the axios post request" duration="1"/>
+    <testCase name="Upload Endpoint successfully uploads a file with artifact description" duration="0"/>
+  </file>
+  <file path="/Users/hugo/Developer/sauce-labs-storage-action/__tests__/endpoints/storage/files.test.js">
+    <testCase name="Files Endpoint Without filtering sends correct authorization header" duration="1"/>
+    <testCase name="Files Endpoint Without filtering fetches file id successfully" duration="1"/>
+    <testCase name="Files Endpoint Without filtering handles no matching file found" duration="0"/>
+    <testCase name="Files Endpoint Without filtering handles unexpected response code" duration="0"/>
+    <testCase name="Files Endpoint Without filtering handles unexpected response structure" duration="1"/>
+    <testCase name="Files Endpoint Without filtering handles exception" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by platform" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by platform" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by version" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by version" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by build" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by build" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by description" duration="0"/>
+    <testCase name="Files Endpoint With Filtering filters by description" duration="0"/>
+  </file>
+</testExecutions>
