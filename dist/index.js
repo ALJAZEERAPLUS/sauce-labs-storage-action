@@ -10713,6 +10713,10 @@ async function main() {
 
 exports.main = main;
 
+if (require.main === require.cache[eval('__filename')]) {
+  main();
+}
+
 })();
 
 module.exports = __webpack_exports__;
