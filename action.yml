@@ -33,7 +33,7 @@ inputs:
   git-file-id-build-number:
     description: "Build number to get the file from (required for get artifact)"
     required: false
-    default: 1
+    default: "1"
   get-file-id-description:
     description: "Description to get the file from (required for get artifact)"
     required: false
@@ -46,4 +46,4 @@ branding:
   color: red
 runs:
   using: node16
-  main: src/index.js
+  main: dist/index.js

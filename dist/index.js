@@ -6170,7 +6170,7 @@ async function files() {
     const filteredItems = items.filter((file) => (
       (!platform || file.kind === platform)
       && (!version || file.metadata.version === version)
-      && (!build || file.metadata.version_code === build)
+      && (!build || file.metadata.version_code === parseInt(build, 10))
       && (!description || file.description.includes(description))
     ));
 
@@ -10686,6 +10686,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 var exports = __webpack_exports__;
+/* eslint-disable import/no-unresolved */
 const core = __nccwpck_require__(4091);
 const upload = __nccwpck_require__(3915);
 const files = __nccwpck_require__(1742);

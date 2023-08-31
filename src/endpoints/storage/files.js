@@ -30,7 +30,7 @@ async function files() {
     const filteredItems = items.filter((file) => (
       (!platform || file.kind === platform)
       && (!version || file.metadata.version === version)
-      && (!build || file.metadata.version_code === build)
+      && (!build || file.metadata.version_code === parseInt(build, 10))
       && (!description || file.description.includes(description))
     ));
 

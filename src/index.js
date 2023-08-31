@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 const core = require('@actions/core');
 const upload = require('./endpoints/storage/upload');
 const files = require('./endpoints/storage/files');
