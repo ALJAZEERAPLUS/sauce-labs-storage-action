@@ -15,6 +15,7 @@ describe('Files Endpoint', () => {
         'sauce-labs-username': 'username',
         'sauce-labs-access-key': 'access-key',
         'sauce-labs-data-center-host-name': 'https://api.region.saucelabs.com',
+        'get-file-id-platform': 'ios', // default from Action.yml
       };
 
       core.getInput.mockImplementation((name) => mockValues[name]);
@@ -26,6 +27,10 @@ describe('Files Endpoint', () => {
       expect(axios.get).toHaveBeenCalledWith(expect.anything(), {
         headers: {
           Authorization: `Basic ${Buffer.from('username:access-key').toString('base64')}`,
+        },
+        arguments: {
+          kind: 'ios',
+          per_page: 100,
         },
       });
     });
@@ -103,6 +108,7 @@ describe('Files Endpoint', () => {
         'sauce-labs-username': 'username',
         'sauce-labs-access-key': 'access-key',
         'sauce-labs-data-center-host-name': 'https://api.region.saucelabs.com',
+        'get-file-id-platform': 'ios', // default from Action.yml
       };
 
       core.getInput.mockImplementation((name) => mockValues[name]);
@@ -112,34 +118,41 @@ describe('Files Endpoint', () => {
         data: {
           items: [
             {
-              id: '1234', kind: 'android', metadata: { version: '1.1.1', version_code: 101 }, description: 'Branch: develop',
+              id: '1234',
+              kind: 'android',
+              metadata: { version: '1.1.1', version_code: 101 },
+              description: 'Branch: develop',
             },
             {
-              id: '5678', kind: 'ios', metadata: { version: '1.1.2', version_code: 102 }, description: 'Branch: master',
+              id: '5678',
+              kind: 'ios',
+              metadata: { short_version: '1.1.2', version: '102' },
+              description: 'Branch: master',
             },
           ],
         },
       });
     });
 
+    // test.each`
+    //   platform     | expected
+    //   ${'android'} | ${'1234'}
+    //   ${'ios'}     | ${'5678'}
+    // `('filters by platform', async ({ platform, expected }) => {
+    //   mockValues['get-file-id-platform'] = platform;
+    //   core.getInput.mockImplementation((name) => mockValues[name]);
+
+    //   await files();
+
+    //   expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
+    // });
+
     test.each`
-      platform     | expected
-      ${'android'} | ${'1234'}
-      ${'ios'}     | ${'5678'}
-    `('filters by platform', async ({ platform, expected }) => {
+      platform     | version     | expected
+      ${'android'} | ${'1.1.1'}  | ${'1234'}
+      ${'ios'}     | ${'1.1.2'}  | ${'5678'}
+    `('filters by version', async ({ platform, version, expected }) => {
       mockValues['get-file-id-platform'] = platform;
-      core.getInput.mockImplementation((name) => mockValues[name]);
-
-      await files();
-
-      expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
-    });
-
-    test.each`
-      version     | expected
-      ${'1.1.1'}  | ${'1234'}
-      ${'1.1.2'}  | ${'5678'}
-    `('filters by version', async ({ version, expected }) => {
       mockValues['get-file-id-version'] = version;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
@@ -149,10 +162,11 @@ describe('Files Endpoint', () => {
     });
 
     test.each`
-      build | expected
-      ${101} | ${'1234'}
-      ${102} | ${'5678'}
-    `('filters by build', async ({ build, expected }) => {
+      platform     | build     | expected
+      ${'android'} | ${'101'}  | ${'1234'}
+      ${'ios'}     | ${'102'}  | ${'5678'}
+    `('filters by build', async ({ platform, build, expected }) => {
+      mockValues['get-file-id-platform'] = platform;
       mockValues['get-file-id-build'] = build;
       core.getInput.mockImplementation((name) => mockValues[name]);
 

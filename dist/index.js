@@ -6145,7 +6145,7 @@ async function files() {
   const username = core.getInput('sauce-labs-username', { required: true });
   const accessKey = core.getInput('sauce-labs-access-key', { required: true });
   const hostName = core.getInput('sauce-labs-data-center-host-name', { required: false });
-  const platform = core.getInput('get-file-id-platform', { required: false });
+  const platform = core.getInput('get-file-id-platform', { required: false }).toLowerCase();
   const version = core.getInput('get-file-id-version', { required: false });
   const build = core.getInput('get-file-id-build', { required: false });
   const description = core.getInput('get-file-id-description', { required: false });
@@ -6154,6 +6154,10 @@ async function files() {
     const response = await axios.get(`${hostName}/v1/storage/files`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
+      },
+      arguments: {
+        kind: platform,
+        per_page: 100,
       },
     });
 
@@ -6168,9 +6172,8 @@ async function files() {
     }
 
     const filteredItems = items.filter((file) => (
-      (!platform || file.kind === platform)
-      && (!version || file.metadata.version === version)
-      && (!build || file.metadata.version_code === parseInt(build, 10))
+      (!version || (platform === 'ios' && file.metadata.short_version === version) || (platform === 'android' && file.metadata.version === version))
+      && (!build || (platform === 'ios' && file.metadata.version === build) || (platform === 'android' && file.metadata.version_code === parseInt(build, 10)))
       && (!description || file.description.includes(description))
     ));
 
