@@ -134,19 +134,6 @@ describe('Files Endpoint', () => {
       });
     });
 
-    // test.each`
-    //   platform     | expected
-    //   ${'android'} | ${'1234'}
-    //   ${'ios'}     | ${'5678'}
-    // `('filters by platform', async ({ platform, expected }) => {
-    //   mockValues['get-file-id-platform'] = platform;
-    //   core.getInput.mockImplementation((name) => mockValues[name]);
-
-    //   await files();
-
-    //   expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
-    // });
-
     test.each`
       platform     | version     | expected
       ${'android'} | ${'1.1.1'}  | ${'1234'}
