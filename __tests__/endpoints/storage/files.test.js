@@ -28,7 +28,7 @@ describe('Files Endpoint', () => {
         headers: {
           Authorization: `Basic ${Buffer.from('username:access-key').toString('base64')}`,
         },
-        arguments: {
+        params: {
           kind: 'ios',
           per_page: 100,
         },

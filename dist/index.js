@@ -6155,7 +6155,7 @@ async function files() {
       headers: {
         Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
       },
-      arguments: {
+      params: {
         kind: platform,
         per_page: 100,
       },
