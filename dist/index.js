@@ -6147,7 +6147,7 @@ async function files() {
   const hostName = core.getInput('sauce-labs-data-center-host-name', { required: false });
   const platform = core.getInput('get-file-id-platform', { required: false }).toLowerCase();
   const version = core.getInput('get-file-id-app-version', { required: false });
-  const build = core.getInput('get-file-id-app-build', { required: false });
+  const build = core.getInput('get-file-id-app-build-number', { required: false });
   const description = core.getInput('get-file-id-app-description', { required: false });
 
   try {

@@ -154,7 +154,7 @@ describe('Files Endpoint', () => {
       ${'ios'}     | ${'102'}  | ${'5678'}
     `('filters by build', async ({ platform, build, expected }) => {
       mockValues['get-file-id-platform'] = platform;
-      mockValues['get-file-id-app-build'] = build;
+      mockValues['get-file-id-app-build-number'] = build;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
       await files();
