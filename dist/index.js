@@ -6146,9 +6146,9 @@ async function files() {
   const accessKey = core.getInput('sauce-labs-access-key', { required: true });
   const hostName = core.getInput('sauce-labs-data-center-host-name', { required: false });
   const platform = core.getInput('get-file-id-platform', { required: false }).toLowerCase();
-  const version = core.getInput('get-file-id-version', { required: false });
-  const build = core.getInput('get-file-id-build', { required: false });
-  const description = core.getInput('get-file-id-description', { required: false });
+  const version = core.getInput('get-file-id-app-version', { required: false });
+  const build = core.getInput('get-file-id-app-build', { required: false });
+  const description = core.getInput('get-file-id-app-description', { required: false });
 
   try {
     const response = await axios.get(`${hostName}/v1/storage/files`, {

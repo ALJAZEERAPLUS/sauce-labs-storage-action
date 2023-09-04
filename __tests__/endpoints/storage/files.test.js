@@ -140,7 +140,7 @@ describe('Files Endpoint', () => {
       ${'ios'}     | ${'1.1.2'}  | ${'5678'}
     `('filters by version', async ({ platform, version, expected }) => {
       mockValues['get-file-id-platform'] = platform;
-      mockValues['get-file-id-version'] = version;
+      mockValues['get-file-id-app-version'] = version;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
       await files();
@@ -154,7 +154,7 @@ describe('Files Endpoint', () => {
       ${'ios'}     | ${'102'}  | ${'5678'}
     `('filters by build', async ({ platform, build, expected }) => {
       mockValues['get-file-id-platform'] = platform;
-      mockValues['get-file-id-build'] = build;
+      mockValues['get-file-id-app-build'] = build;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
       await files();
@@ -167,7 +167,7 @@ describe('Files Endpoint', () => {
       ${'develop'} | ${'1234'}
       ${'master'}  | ${'5678'}
     `('filters by description', async ({ description, expected }) => {
-      mockValues['get-file-id-description'] = description;
+      mockValues['get-file-id-app-description'] = description;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
       await files();
