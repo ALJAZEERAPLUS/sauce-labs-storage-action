@@ -25,13 +25,13 @@ inputs:
   get-file-id-platform:
     description: "Platform to get the file from (required for get artifact)"
     required: false
-  get-file-id-version:
+  get-file-id-app-version:
     description: "Version to get the file from (required for get artifact)"
     required: false
-  git-file-id-build-number:
+  get-file-id-app-build-number:
     description: "Build number to get the file from (required for get artifact)"
     required: false
-  get-file-id-description:
+  get-file-id-app-description:
     description: "Description to get the file from (required for get artifact)"
     required: false
 outputs:
