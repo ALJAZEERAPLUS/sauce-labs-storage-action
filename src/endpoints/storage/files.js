@@ -34,7 +34,7 @@ async function files() {
     const filteredItems = items.filter((file) => (
       (!version || (platform === 'ios' && file.metadata.short_version === version) || (platform === 'android' && file.metadata.version === version))
       && (!build || (platform === 'ios' && file.metadata.version === build) || (platform === 'android' && file.metadata.version_code === parseInt(build, 10)))
-      && (!description || file.description.includes(description))
+      && (!description || (file.description && file.description.includes(description)))
     ));
 
     let fileId = null;
