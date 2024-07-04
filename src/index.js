@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 const core = require('@actions/core');
 const upload = require('./endpoints/storage/upload');
-const files = require('./endpoints/storage/files');
+const fetchFiles = require('./endpoints/storage/fetchFiles');
 
 async function main() {
   const endpointAction = core.getInput('endpoint-action');
@@ -12,7 +12,7 @@ async function main() {
         await upload();
         break;
       case 'get-file-id':
-        await files();
+        await fetchFiles();
         break;
       default:
         core.setFailed(`[ERROR] Invalid endpoint action: ${endpointAction}`);

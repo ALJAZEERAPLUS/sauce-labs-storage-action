@@ -1,6 +1,6 @@
 const axios = require('axios');
 const core = require('@actions/core');
-const files = require('../../../src/endpoints/storage/files');
+const fetchFiles = require('../../../src/endpoints/storage/fetchFiles');
 
 jest.mock('axios');
 jest.mock('@actions/core');
@@ -22,15 +22,16 @@ describe('Files Endpoint', () => {
     });
 
     test('sends correct authorization header', async () => {
-      await files();
+      await fetchFiles();
 
-      expect(axios.get).toHaveBeenCalledWith(expect.anything(), {
+      expect(axios.get).toHaveBeenCalledWith('https://api.region.saucelabs.com/v1/storage/files', {
         headers: {
           Authorization: `Basic ${Buffer.from('username:access-key').toString('base64')}`,
         },
         params: {
           kind: 'ios',
           per_page: 100,
+          page: 1,
         },
       });
     });
@@ -42,11 +43,12 @@ describe('Files Endpoint', () => {
           items: [{
             id: '1234',
             kind: 'android',
+            page: 1,
           }],
         },
       });
 
-      await files();
+      await fetchFiles();
 
       expect(axios.get).toHaveBeenCalled();
       expect(core.setOutput).toHaveBeenCalledWith('file-id', '1234');
@@ -61,10 +63,10 @@ describe('Files Endpoint', () => {
         },
       });
 
-      await files();
+      await fetchFiles();
 
       expect(axios.get).toHaveBeenCalled();
-      expect(core.setFailed).toHaveBeenCalledWith('No file found');
+      expect(core.setFailed).toHaveBeenCalledWith('File not found');
     });
 
     test('handles unexpected response code', async () => {
@@ -72,7 +74,7 @@ describe('Files Endpoint', () => {
         status: 404,
       });
 
-      await files();
+      await fetchFiles();
 
       expect(axios.get).toHaveBeenCalled();
       expect(core.setFailed).toHaveBeenCalledWith('Unexpected error: Unexpected response code: 404');
@@ -84,7 +86,7 @@ describe('Files Endpoint', () => {
         data: {},
       });
 
-      await files();
+      await fetchFiles();
 
       expect(axios.get).toHaveBeenCalled();
       expect(core.setFailed).toHaveBeenCalledWith('Unexpected error: Unexpected response structure');
@@ -93,7 +95,7 @@ describe('Files Endpoint', () => {
     test('handles exception', async () => {
       axios.get.mockRejectedValue(new Error('Network error'));
 
-      await files();
+      await fetchFiles();
 
       expect(axios.get).toHaveBeenCalled();
       expect(core.setFailed).toHaveBeenCalledWith('Unexpected error: Network error');
@@ -143,7 +145,7 @@ describe('Files Endpoint', () => {
       mockValues['get-file-id-app-version'] = version;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
-      await files();
+      await fetchFiles();
 
       expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
     });
@@ -157,7 +159,7 @@ describe('Files Endpoint', () => {
       mockValues['get-file-id-app-build-number'] = build;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
-      await files();
+      await fetchFiles();
 
       expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
     });
@@ -170,7 +172,7 @@ describe('Files Endpoint', () => {
       mockValues['get-file-id-app-description'] = description;
       core.getInput.mockImplementation((name) => mockValues[name]);
 
-      await files();
+      await fetchFiles();
 
       expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
     });

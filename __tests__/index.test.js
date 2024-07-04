@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 const core = require('@actions/core');
 const upload = require('../src/endpoints/storage/upload');
-const files = require('../src/endpoints/storage/files');
+const fetchFiles = require('../src/endpoints/storage/fetchFiles');
 const index = require('../src/index');
 
 jest.mock('@actions/core', () => ({
@@ -10,7 +10,7 @@ jest.mock('@actions/core', () => ({
   info: jest.fn(),
 }));
 jest.mock('../src/endpoints/storage/upload');
-jest.mock('../src/endpoints/storage/files');
+jest.mock('../src/endpoints/storage/fetchFiles');
 
 describe('Action execution', () => {
   afterEach(() => {
@@ -23,7 +23,7 @@ describe('Action execution', () => {
     await index.main();
 
     expect(upload).toHaveBeenCalled();
-    expect(files).not.toHaveBeenCalled();
+    expect(fetchFiles).not.toHaveBeenCalled();
   });
 
   it('should call files when endpoint-action is "get-file-id"', async () => {
@@ -31,7 +31,7 @@ describe('Action execution', () => {
 
     await index.main();
 
-    expect(files).toHaveBeenCalled();
+    expect(fetchFiles).toHaveBeenCalled();
     expect(upload).not.toHaveBeenCalled();
   });
 

@@ -31,7 +31,7 @@ jobs:
       uses: ALJAZEERAPLUS/sauce-labs-storage-action@v2
       with:
         endpoint-action: upload
-        file-path: app/build/outputs/apk/release/app-release.apk
+        upload-file-path: app/build/outputs/apk/release/app-release.apk
         sauce-labs-username: ${{ secrets.SAUCELABS_USERNAME }}
         sauce-labs-access-key: ${{ secrets.SAUCELABS_ACCESS_KEY }}
 ```
