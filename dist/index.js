@@ -6192,19 +6192,7 @@ exports["default"] = _default;
 /* eslint-disable camelcase */
 const axios = __nccwpck_require__(229);
 const core = __nccwpck_require__(9773);
-
-/**
- * Generates the authorization header for the Sauce Labs Storage API.
- *
- * @param {string} username - The username for authentication.
- * @param {string} accessKey - The access key for authentication.
- * @returns {string} The authorization header.
- */
-function getAuthHeader(username, accessKey) {
-  const credentials = `${username}:${accessKey}`;
-  return `Basic ${Buffer.from(credentials).toString('base64')}`;
-}
-
+const getAuthHeader = __nccwpck_require__(1186);
 /**
  * Filters the items based on the provided criteria, with platform-specific handling for version
  * and build values.
@@ -6313,6 +6301,7 @@ const axios = __nccwpck_require__(229);
 const core = __nccwpck_require__(9773);
 const FormData = __nccwpck_require__(6381);
 const fs = __nccwpck_require__(7147);
+const getAuthHeader = __nccwpck_require__(1186);
 
 async function upload() {
   const username = core.getInput('sauce-labs-username', { required: true });
@@ -6331,15 +6320,15 @@ async function upload() {
     const uploadResponse = await axios.post(`${hostName}/v1/storage/upload`, requestData, {
       headers: {
         Accept: 'application/json',
-        Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
+        Authorization: getAuthHeader(username, accessKey),
         ...requestData.getHeaders(),
       },
     }).then((response) => {
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         throw new Error(`Unexpected status: ${response.status} - ${response.statusText}`);
       }
 
-      if (!response.data || !response.data.item) {
+      if (!response?.data?.item) {
         throw new Error('Response data is missing or incomplete');
       }
       return response;
@@ -6359,7 +6348,7 @@ async function upload() {
         {
           headers: {
             'Content-type': 'application/json',
-            Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
+            Authorization: getAuthHeader(username, accessKey),
           },
         },
       );
@@ -6373,6 +6362,26 @@ async function upload() {
 }
 
 module.exports = upload;
+
+
+/***/ }),
+
+/***/ 1186:
+/***/ ((module) => {
+
+/**
+ * Generates the authorization header for the Sauce Labs Storage API.
+ *
+ * @param {string} username - The username for authentication.
+ * @param {string} accessKey - The access key for authentication.
+ * @returns {string} The authorization header.
+ */
+function getAuthHeader(username, accessKey) {
+  const credentials = `${username}:${accessKey}`;
+  return `Basic ${Buffer.from(credentials).toString('base64')}`;
+}
+
+module.exports = getAuthHeader;
 
 
 /***/ }),
