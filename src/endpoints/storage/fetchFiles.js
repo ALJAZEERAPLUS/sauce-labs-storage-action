@@ -1,19 +1,7 @@
 /* eslint-disable camelcase */
 const axios = require('axios');
 const core = require('@actions/core');
-
-/**
- * Generates the authorization header for the Sauce Labs Storage API.
- *
- * @param {string} username - The username for authentication.
- * @param {string} accessKey - The access key for authentication.
- * @returns {string} The authorization header.
- */
-function getAuthHeader(username, accessKey) {
-  const credentials = `${username}:${accessKey}`;
-  return `Basic ${Buffer.from(credentials).toString('base64')}`;
-}
-
+const getAuthHeader = require('../../utils/utils');
 /**
  * Filters the items based on the provided criteria, with platform-specific handling for version
  * and build values.

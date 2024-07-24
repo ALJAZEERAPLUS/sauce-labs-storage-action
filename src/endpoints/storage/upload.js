@@ -2,6 +2,7 @@ const axios = require('axios');
 const core = require('@actions/core');
 const FormData = require('form-data');
 const fs = require('fs');
+const getAuthHeader = require('../../utils/utils');
 
 async function upload() {
   const username = core.getInput('sauce-labs-username', { required: true });
@@ -20,15 +21,15 @@ async function upload() {
     const uploadResponse = await axios.post(`${hostName}/v1/storage/upload`, requestData, {
       headers: {
         Accept: 'application/json',
-        Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
+        Authorization: getAuthHeader(username, accessKey),
         ...requestData.getHeaders(),
       },
     }).then((response) => {
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         throw new Error(`Unexpected status: ${response.status} - ${response.statusText}`);
       }
 
-      if (!response.data || !response.data.item) {
+      if (!response?.data?.item) {
         throw new Error('Response data is missing or incomplete');
       }
       return response;
@@ -48,7 +49,7 @@ async function upload() {
         {
           headers: {
             'Content-type': 'application/json',
-            Authorization: `Basic ${Buffer.from(`${username}:${accessKey}`).toString('base64')}`,
+            Authorization: getAuthHeader(username, accessKey),
           },
         },
       );

@@ -34,7 +34,7 @@ describe('Upload Endpoint', () => {
 
   test('successfully uploads a file', async () => {
     axios.post.mockResolvedValue({
-      status: 200,
+      status: 201,
       statusText: 'OK',
       data: {
         item: {
@@ -46,7 +46,7 @@ describe('Upload Endpoint', () => {
     await upload();
 
     expect(axios.post).toHaveBeenCalled();
-    expect(core.info).toHaveBeenCalledWith('Response: 200 - OK');
+    expect(core.info).toHaveBeenCalledWith('Response: 201 - OK');
     expect(core.setOutput).toHaveBeenCalledWith('file-id', '1234');
   });
 
@@ -73,7 +73,7 @@ describe('Upload Endpoint', () => {
 
   test('throws an error when upload response does not have an item', async () => {
     axios.post.mockResolvedValue({
-      status: 200,
+      status: 201,
       statusText: 'OK',
       data: {},
     });
@@ -96,7 +96,7 @@ describe('Upload Endpoint', () => {
     mockValues['upload-artifact-description'] = 'artifact description';
 
     axios.post.mockResolvedValue({
-      status: 200,
+      status: 201,
       statusText: 'OK',
       data: {
         item: {
