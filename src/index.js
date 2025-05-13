@@ -4,7 +4,8 @@ const upload = require('./endpoints/storage/upload');
 const fetchFiles = require('./endpoints/storage/fetchFiles');
 
 async function main() {
-  const endpointAction = core.getInput('endpoint-action');
+  // const endpointAction = core.getInput('endpoint-action');
+  const endpointAction = 'upload';
 
   try {
     switch (endpointAction) {

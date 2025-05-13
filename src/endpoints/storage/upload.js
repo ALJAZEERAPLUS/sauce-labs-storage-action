@@ -4,12 +4,14 @@ const FormData = require('form-data');
 const fs = require('fs');
 const getAuthHeader = require('../../utils/utils');
 
+const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
+
 async function upload() {
-  const username = core.getInput('sauce-labs-username', { required: true });
-  const accessKey = core.getInput('sauce-labs-access-key', { required: true });
-  const hostName = core.getInput('sauce-labs-data-center-host-name', { required: false });
-  const filePath = core.getInput('upload-file-path', { required: true });
-  const artifactDescription = core.getInput('upload-artifact-description', { required: false });
+  const username = 'SANTOSV';
+  const accessKey = '8f572c21-d082-4cfd-b504-ca1e755c439c';
+  const hostName = 'https://api.us-west-1.saucelabs.com';
+  const filePath = '/Users/hugo/Downloads/app-release-2.aab';
+  const artifactDescription = 'Built from branch: ANA-2963. Workflow URL: https://github.com/ALJAZEERAPLUS/ump/actions/runs/14994798538';
   try {
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found at path: ${filePath}`);
@@ -37,28 +39,54 @@ async function upload() {
 
     core.info(`Response: ${uploadResponse.status} - ${uploadResponse.statusText}`);
     const fileId = uploadResponse.data.item.id;
+    core.info(`File uploaded successfully with ID: ${fileId}`);
 
     if (artifactDescription) {
-      const editResponse = await axios.put(
-        `${hostName}/v1/storage/files/${fileId}`,
-        {
-          item: {
-            description: artifactDescription,
+      try {
+        // Add a small delay to ensure the file is fully processed
+        await sleep(2000);
+
+        const descriptionUrl = `${hostName}/v1/storage/files/${fileId}`;
+        core.info(`Attempting to update description at: ${descriptionUrl}`);
+
+        const editResponse = await axios.put(
+          descriptionUrl,
+          {
+            item: {
+              description: artifactDescription,
+            },
           },
-        },
-        {
-          headers: {
-            'Content-type': 'application/json',
-            Authorization: getAuthHeader(username, accessKey),
+          {
+            headers: {
+              'Content-type': 'application/json',
+              Authorization: getAuthHeader(username, accessKey),
+            },
           },
-        },
-      );
-      core.info(`Response: ${editResponse.status} - ${editResponse.statusText}`);
+        );
+        core.info(`Description update response: ${editResponse.status} - ${editResponse.statusText}`);
+      } catch (descriptionError) {
+        // Log the error but don't fail the whole upload
+        core.warning(`Failed to update description: ${descriptionError.message}`);
+        if (descriptionError.response) {
+          core.warning(`Error details: ${JSON.stringify({
+            status: descriptionError.response.status,
+            statusText: descriptionError.response.statusText,
+            data: descriptionError.response.data,
+          }, null, 2)}`);
+        }
+      }
     }
 
     core.setOutput('file-id', fileId);
   } catch (error) {
     core.setFailed(`Unexpected error: ${error.message}`);
+    if (error.response) {
+      core.error(`Error details: ${JSON.stringify({
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+      }, null, 2)}`);
+    }
   }
 }
 
