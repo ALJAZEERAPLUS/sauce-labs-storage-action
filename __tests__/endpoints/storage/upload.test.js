@@ -47,6 +47,7 @@ describe('Upload Endpoint', () => {
 
     expect(axios.post).toHaveBeenCalled();
     expect(core.info).toHaveBeenCalledWith('Response: 201 - OK');
+    expect(core.info).toHaveBeenCalledWith('File uploaded successfully with ID: 1234');
     expect(core.setOutput).toHaveBeenCalledWith('file-id', '1234');
   });
 

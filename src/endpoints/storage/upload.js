@@ -7,11 +7,11 @@ const getAuthHeader = require('../../utils/utils');
 const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
 async function upload() {
-  const username = 'SANTOSV';
-  const accessKey = '8f572c21-d082-4cfd-b504-ca1e755c439c';
-  const hostName = 'https://api.us-west-1.saucelabs.com';
-  const filePath = '/Users/hugo/Downloads/app-release-2.aab';
-  const artifactDescription = 'Built from branch: ANA-2963. Workflow URL: https://github.com/ALJAZEERAPLUS/ump/actions/runs/14994798538';
+  const username = core.getInput('sauce-labs-username', { required: true });
+  const accessKey = core.getInput('sauce-labs-access-key', { required: true });
+  const hostName = core.getInput('sauce-labs-data-center-host-name', { required: false });
+  const filePath = core.getInput('upload-file-path', { required: true });
+  const artifactDescription = core.getInput('upload-artifact-description', { required: false });
   try {
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found at path: ${filePath}`);
