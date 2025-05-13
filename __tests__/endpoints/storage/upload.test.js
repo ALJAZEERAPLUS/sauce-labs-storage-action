@@ -115,7 +115,7 @@ describe('Upload Endpoint', () => {
 
     expect(axios.post).toHaveBeenCalled();
     expect(axios.put).toHaveBeenCalled();
-    expect(core.info).toHaveBeenCalledWith('Response: 200 - OK');
+    expect(core.info).toHaveBeenCalledWith('Response: 201 - OK');
     expect(core.setOutput).toHaveBeenCalledWith('file-id', '1234');
   });
 });
