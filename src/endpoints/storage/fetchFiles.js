@@ -42,10 +42,14 @@ async function fetchFiles() {
 
   const perPage = 100;
   let pageCounter = 1;
-  let fileId = null;
+  let lastPage = null;
+  const matches = [];
 
   core.debug(`Fetching files for ${platform} platform`);
 
+  // The Storage API documents no sort/order parameter and no guaranteed item order, so every
+  // matching page is collected and sorted client-side by upload_timestamp — taking page 1's first
+  // match silently picked whatever order Sauce happened to return, which could be a stale build.
   do {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -70,32 +74,26 @@ async function fetchFiles() {
         throw new Error('Unexpected response structure');
       }
 
-      const filteredItems = filterItems(items, version, build, description, platform);
-      const page = Math.ceil(total_items / perPage);
+      matches.push(...filterItems(items, version, build, description, platform));
+      lastPage = Math.ceil(total_items / perPage);
 
-      core.info(`Page ${pageCounter}/${page} - No files found!`);
-
-      if (filteredItems.length > 0) {
-        fileId = filteredItems[0].id;
-        core.info(`File ID: ${fileId}`);
-        break;
-      } else if (!page || pageCounter >= page) {
-        core.info('No files found');
-        break;
-      }
+      core.info(`Page ${pageCounter}/${lastPage} - ${matches.length} match(es) so far`);
 
       pageCounter += 1;
     } catch (error) {
       core.setFailed(`Unexpected error: ${error.message}`);
-      break;
+      return;
     }
-  } while (!fileId);
+  } while (lastPage && pageCounter <= lastPage);
 
-  if (!fileId) {
+  if (matches.length === 0) {
     core.setFailed('File not found');
-  } else {
-    core.setOutput('file-id', fileId);
+    return;
   }
+
+  const [newest] = matches.toSorted((a, b) => b.upload_timestamp - a.upload_timestamp);
+  core.info(`File ID: ${newest.id}`);
+  core.setOutput('file-id', newest.id);
 }
 
 module.exports = fetchFiles;

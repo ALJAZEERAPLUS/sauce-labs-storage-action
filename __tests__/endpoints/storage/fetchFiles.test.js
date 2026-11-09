@@ -177,4 +177,43 @@ describe('Files Endpoint', () => {
       expect(core.setOutput).toHaveBeenCalledWith('file-id', expected);
     });
   });
+
+  describe('Picks the newest match', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+
+      mockValues = {
+        'sauce-labs-username': 'username',
+        'sauce-labs-access-key': 'access-key',
+        'sauce-labs-data-center-host-name': 'https://api.region.saucelabs.com',
+        'get-file-id-platform': 'android',
+        'get-file-id-app-description': 'rc-trunk',
+      };
+
+      core.getInput.mockImplementation((name) => mockValues[name]);
+    });
+
+    // Regression test: the Storage API documents no sort/order param and no guaranteed item
+    // order, so picking the first match (the previous implementation) could return a stale build.
+    test('ignores API item order and returns the match with the latest upload_timestamp', async () => {
+      axios.get.mockResolvedValue({
+        status: 200,
+        data: {
+          total_items: 2,
+          items: [
+            {
+              id: 'old-build', kind: 'android', metadata: {}, description: 'rc-trunk build', upload_timestamp: 1000,
+            },
+            {
+              id: 'new-build', kind: 'android', metadata: {}, description: 'rc-trunk build', upload_timestamp: 2000,
+            },
+          ],
+        },
+      });
+
+      await fetchFiles();
+
+      expect(core.setOutput).toHaveBeenCalledWith('file-id', 'new-build');
+    });
+  });
 });
