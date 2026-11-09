@@ -6282,7 +6282,7 @@ async function fetchFiles() {
     return;
   }
 
-  const [newest] = matches.sort((a, b) => b.upload_timestamp - a.upload_timestamp);
+  const [newest] = matches.toSorted((a, b) => b.upload_timestamp - a.upload_timestamp);
   core.info(`File ID: ${newest.id}`);
   core.setOutput('file-id', newest.id);
 }
