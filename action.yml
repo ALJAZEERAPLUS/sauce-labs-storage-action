@@ -21,7 +21,7 @@ inputs:
   upload-artifact-description:
     description: "App build description (required for upload artifact)"
     required: false
-    default: "Built from branch: ${{ (github.event_name == 'push' && github.ref) || (github.event_name == 'pull_request' && github.head_ref) }}. Workflow URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+    default: "Built from branch: ${{ (github.event_name == 'push' && github.ref_name) || (github.event_name == 'pull_request' && github.head_ref) }}. Workflow URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
   get-file-id-platform:
     description: "Platform to get the file from (required for get artifact)"
     required: false
